@@ -40,7 +40,7 @@
             text-white
             flex
           "
-          href="#pablo"
+          href="/"
         >
           <img class="w-12 mr-2" src="/assets/icon.png" alt="" />
           <span class="mx-1 my-3"> Countries  </span>
