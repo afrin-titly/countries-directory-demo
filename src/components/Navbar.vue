@@ -38,12 +38,12 @@
             whitespace-nowrap
             uppercase
             text-white
+            flex
           "
           href="#pablo"
         >
-          <img src="" alt="">
-          pink Color
-          
+          <img class="w-12 mr-2" src="/assets/icon.png" alt="" />
+          <span class="mx-1 my-3"> Countries  </span>
         </a>
         <button
           class="
@@ -72,15 +72,18 @@
         class="lg:flex lg:flex-grow items-center"
       >
         <ul class="flex flex-col lg:flex-row list-none ml-auto">
-          
           <li class="nav-item">
             <router-link to="/">
-              <span class="text-white font-semibold px-3 py-2 item-center flex">Home</span>
+              <span class="text-white font-semibold px-3 py-2 item-center flex"
+                >Home</span
+              >
             </router-link>
           </li>
           <li class="nav-item">
             <router-link to="/about">
-              <span class="text-white font-semibold px-3 py-2 item-center flex">About</span>
+              <span class="text-white font-semibold px-3 py-2 item-center flex"
+                >About</span
+              >
             </router-link>
           </li>
         </ul>
