@@ -12,8 +12,10 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 library.add(far);
 import { dom } from "@fortawesome/fontawesome-svg-core";
 dom.watch();
+import axios from 'axios';
 
 const app = createApp(App)
 app.use(router)
+app.config.globalProperties.$axios = axios
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount('#app')
