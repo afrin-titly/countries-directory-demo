@@ -8,15 +8,14 @@
       </form>
     </div>
     <div class="flex w-1/2 mx-auto my-6 px-10 py-4">
-      <CountryList />
-      <CountryDetails />
+      <CountryList :countryListData="countryList" @selected="selectCountry" />
+      <CountryDetails v-if="countryList" :country="selectedCountryDetails" />
     </div>
   </div>
   
 </template>
 
 <script>
-// @ is an alias to /src
 import CountryList from '../components/CountryList.vue'
 import CountryDetails from '../components/CountryDetails.vue'
 export default {
@@ -28,12 +27,34 @@ export default {
   data(){
     return {
       keyword: '',
+      countryList: [],
+      selectedCountryDetails: []
     }
+  },
+  mounted() {
+    this.fetchCountryList()
+    
+    // this.defaultCountry()
   },
   methods: {
     submitForm() {
       console.log(this.keyword)
-    }
+    },
+    async fetchCountryList() {
+      this.countryList = await this.$axios
+        .get("https://restcountries.eu/rest/v2/all")
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        this.selectedCountryDetails = this.countryList[18]
+        console.log(this.countryList)
+    },
+    selectCountry(country) {
+      this.selectedCountryDetails = country
+    },
   }
 }
 </script>
