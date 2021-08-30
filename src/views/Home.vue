@@ -1,14 +1,14 @@
 <template>
   <div class="block">
     <h1 class="text-4xl my-6"> Countries Directory </h1>
-    <div class="block w-1/2 mx-auto">
+    <div class="block sm:w-3/4 w-full mx-auto">
       <form @submit.prevent="submitForm">
-        <input class="border border-black w-2/3 py-2 px-4 rounded bg-gray-300" type="text" v-model="keyword" placeholder="Enter country name,code,currency etc.">
+        <input class="border border-black w-2/3 py-2 px-4 rounded bg-gray-300" type="text" v-model="keyword" placeholder="Enter country name,code,currency etc." @input="submitForm">
         <button class="bg-indigo-500 mx-4 py-2 px-4 rounded text-white font-bold"><i class="fas fa-search"></i> Search</button>
       </form>
     </div>
-    <div class="flex w-1/2 mx-auto my-6 px-10 py-4">
-      <CountryList :countryListData="countryList" @selected="selectCountry" />
+    <div class="flex sm:w-3/4 w-full mx-auto my-6 sm:px-10 px-1 py-4">
+      <CountryList :countryListData="showCountryList" @selected="selectCountry" :type="resultType" />
       <CountryDetails v-if="countryList" :country="selectedCountryDetails" />
     </div>
   </div>
@@ -28,20 +28,46 @@ export default {
     return {
       keyword: '',
       countryList: [],
-      selectedCountryDetails: []
+      selectedCountryDetails: [],
+      showCountryList: [],
+      resultType: "country"
     }
   },
   mounted() {
     this.fetchCountryList()
-    
-    // this.defaultCountry()
   },
   methods: {
     submitForm() {
-      console.log(this.keyword)
+      if(this.resultType == "country"){
+        this.showCountryList = this.countryList.filter(country =>{ 
+        return country.name.substring(0,this.keyword.length).toLowerCase() == this.keyword.toLowerCase()
+        })
+        if(this.showCountryList.length == 0){
+          this.resultType = "capital"
+        }
+      }
+      if(this.resultType == "capital"){
+        this.showCountryList = this.countryList.filter(country =>{ 
+        return country.capital.substring(0,this.keyword.length).toLowerCase() == this.keyword.toLowerCase()
+      })
+      if(this.showCountryList.length == 0){
+          this.resultType = "currency"
+        }
+      }
+      if(this.resultType=="currency"){
+        this.showCountryList = this.countryList.filter(country =>{ 
+        return country.currencies[0].name.substring(0,this.keyword.length).toLowerCase() == this.keyword.toLowerCase()
+      })
+      if(this.showCountryList.length == 0){
+          this.resultType = "country"
+        }
+      }
+      if(this.keyword==""){
+        this.resultType = "country"
+      }
     },
     async fetchCountryList() {
-      this.countryList = await this.$axios
+      this.showCountryList = this.countryList = await this.$axios
         .get("https://restcountries.eu/rest/v2/all")
         .then((response) => {
           return response.data;
@@ -49,8 +75,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-        this.selectedCountryDetails = this.countryList[18]
-        console.log(this.countryList)
+        this.selectedCountryDetails = this.showCountryList[18]
     },
     selectCountry(country) {
       this.selectedCountryDetails = country

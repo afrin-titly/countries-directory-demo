@@ -1,5 +1,5 @@
 <template>
-    <div class="border border-black w-1/2 mx-2 border-gray-400">
+    <div class="border border-black w-1/2 sm:mx-2 mx-0 border-gray-400">
         <h2 class="text-xl font-bold py-2">Country Details</h2>
         <img class="w-36 mx-auto my-4" :src="country.flag" alt="">
         <p class="text-xl font-bold">{{country.name}}</p>
@@ -23,9 +23,6 @@
     export default {
         name: "CountryDetails",
         props: ["country"],
-        mounted(){
-            console.log("ff",this.country)
-        }
     }
 </script>
 
