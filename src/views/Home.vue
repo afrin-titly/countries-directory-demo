@@ -1,18 +1,46 @@
 <template>
   <div class="block">
-    <h1 class="text-4xl my-6"> Countries Directory </h1>
+    <h1 class="text-4xl my-6">Countries Directory</h1>
     <div class="block sm:w-3/4 w-full mx-auto">
       <form @submit.prevent="submitForm">
-        <input class="border border-black w-2/3 py-2 px-4 rounded bg-gray-300" type="text" v-model="keyword" placeholder="Enter country name,code,currency etc." @input="submitForm">
-        <button class="bg-indigo-500 mx-4 py-2 px-4 rounded text-white font-bold"><i class="fas fa-search"></i> Search</button>
+        <input
+          class="border border-black w-2/3 py-2 px-4 rounded bg-gray-300"
+          type="text"
+          v-model="keyword"
+          placeholder="Enter country name,code,currency etc."
+          @input="submitForm"
+        />
+        <button
+          class="bg-indigo-500 mx-4 py-2 px-4 rounded text-white font-bold"
+        >
+          <i class="fas fa-search"></i> Search
+        </button>
       </form>
+      <!-- <div class="flex sm:w-3/4 w-full mx-auto"> -->
+      <label
+        class="items-center mt-4 mr-3"
+        v-for="(region, index) in regionList"
+        :key="index"
+      >
+        <input
+          type="checkbox"
+          class="form-checkbox mt-3 h-4 w-4 text-gray-600"
+          :value="region"
+          v-model="regionChecked"
+          @change="checkRegion()"
+        /><span class="ml-1 text-gray-700">{{ region }}</span>
+      </label>
+      <!-- </div> -->
     </div>
     <div class="flex sm:w-3/4 w-full mx-auto my-6 sm:px-10 px-1 py-4">
-      <CountryList :countryListData="showCountryList" @selected="selectCountry" :type="resultType" />
+      <CountryList
+        :countryListData="showCountryList"
+        @selected="selectCountry"
+        :type="resultType"
+      />
       <CountryDetails v-if="countryList" :country="selectedCountryDetails" />
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -30,8 +58,13 @@ export default {
       countryList: [],
       selectedCountryDetails: [],
       showCountryList: [],
-      resultType: "country"
+      resultType: "country",
+      regionList: [],
+      regionChecked: []
     }
+  },
+  created(){
+    this.regionList = ['Asia', 'Africa', 'Europe', 'Americas', 'Oceania']
   },
   mounted() {
     this.fetchCountryList()
@@ -80,6 +113,15 @@ export default {
     selectCountry(country) {
       this.selectedCountryDetails = country
     },
+    checkRegion() {
+      this.showCountryList = this.countryList.filter(country =>{ 
+        return this.regionChecked.includes(country.region) == true
+    })
+    if(this.showCountryList.length == 0)
+    {
+      this.showCountryList = this.countryList
+    }
+    }
   }
 }
 </script>

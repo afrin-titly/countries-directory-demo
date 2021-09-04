@@ -1,7 +1,7 @@
 <template>
     <div class="border border-black w-1/2 sm:mx-2 mx-0 border-gray-400">
         <h2 class="text-xl font-bold py-2">Country Details</h2>
-        <img class="w-36 mx-auto my-4" :src="country.flag" alt="">
+        <img class="w-36 mx-auto my-4 border border-black" :src="country.flag" alt="">
         <p class="text-xl font-bold">{{country.name}}</p>
         <ul>
             <li>Capital: <span class="font-bold">{{country.capital}}</span></li>
