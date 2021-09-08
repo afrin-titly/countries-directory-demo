@@ -38,7 +38,7 @@
         @selected="selectCountry"
         :type="resultType"
       />
-      <CountryDetails v-if="countryList" :country="selectedCountryDetails" />
+      <CountryDetails v-if="countryList && selectedCountryDetails" :country="selectedCountryDetails" />
     </div>
   </div>
 </template>
@@ -67,7 +67,13 @@ export default {
     this.regionList = ['Asia', 'Africa', 'Europe', 'Americas', 'Oceania']
   },
   mounted() {
-    this.fetchCountryList()
+    this.fetchCountryList().then((response)=>{
+      this.showCountryList = this.countryList = response
+        let default_country = response.filter(country=>{
+          return country.name == "Bangladesh"
+        })
+        this.selectedCountryDetails = default_country[0]
+    })
   },
   methods: {
     submitForm() {
@@ -99,16 +105,28 @@ export default {
         this.resultType = "country"
       }
     },
-    async fetchCountryList() {
-      this.showCountryList = this.countryList = await this.$axios
+    fetchCountryList() {
+      // this.showCountryList = this.countryList
+      return new Promise((resolve1)=>{
+        let cList = new Promise((resolve, reject)=>{
+        this.$axios
         .get("https://restcountries.eu/rest/v2/all")
         .then((response) => {
-          return response.data;
+          let data = response.data;
+          resolve(data)
+          
         })
         .catch((error) => {
           console.log(error);
+          reject(error)
         });
-        this.selectedCountryDetails = this.showCountryList[18]
+        })
+        cList.then((response)=>{
+          resolve1(response)
+          console.log("resolve")
+          console.log(response)
+        })
+      })
     },
     selectCountry(country) {
       this.selectedCountryDetails = country
